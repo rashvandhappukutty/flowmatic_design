@@ -1,0 +1,2845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flowmatic — AI Social Workflow Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --ink: #0D0D12;
+      --ink2: #1E1E28;
+      --ink3: #2C2C3A;
+      --mist: #F4F2EE;
+      --mist2: #EAE8E2;
+      --mist3: #DDDAD2;
+      --text: #0D0D12;
+      --text2: #5A5870;
+      --text3: #9A98A8;
+      --accent: #5B4FE8;
+      --accent2: #7B70F0;
+      --accent-light: #EEF0FF;
+      --green: #1A9E6A;
+      --green-light: #E5F7EF;
+      --amber: #D97706;
+      --amber-light: #FEF3CD;
+      --red: #DC2626;
+      --red-light: #FEE2E2;
+      --blue: #1D6FA8;
+      --blue-light: #DBEEFF;
+      --border: rgba(13, 13, 18, 0.10);
+      --border2: rgba(13, 13, 18, 0.18);
+      --shadow: 0 2px 8px rgba(13, 13, 18, 0.08), 0 0 0 0.5px rgba(13, 13, 18, 0.06);
+      --shadow-lg: 0 8px 32px rgba(13, 13, 18, 0.12), 0 0 0 0.5px rgba(13, 13, 18, 0.06);
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Instrument Sans', sans-serif;
+    }
+
+    html {
+      font-family: var(--font-body);
+      color: var(--text);
+      background: #F0EEE8;
+      font-size: 14px;
+      line-height: 1.5
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: var(--font-display)
+    }
+
+    /* ── PAGE LAYOUT ── */
+    body {
+      padding: 48px 32px;
+      background: #F0EEE8;
+      min-width: 1440px
+    }
+
+    .design-header {
+      text-align: center;
+      margin-bottom: 56px
+    }
+
+    .design-header h1 {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      color: var(--ink)
+    }
+
+    .design-header p {
+      font-size: 16px;
+      color: var(--text2);
+      margin-top: 8px;
+      font-style: italic
+    }
+
+    .screen-label {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .screen-label span {
+      background: var(--ink);
+      color: #fff;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700
+    }
+
+    .screen-wrap {
+      margin-bottom: 56px
+    }
+
+    /* ── FRAME / BROWSER CHROME ── */
+    .frame {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 0.5px solid var(--border2)
+    }
+
+    .frame-chrome {
+      background: var(--mist2);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 0.5px solid var(--border)
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%
+    }
+
+    .dot.r {
+      background: #FF5F57
+    }
+
+    .dot.y {
+      background: #FEBC2E
+    }
+
+    .dot.g {
+      background: #28C840
+    }
+
+    .url-bar {
+      flex: 1;
+      background: #fff;
+      border: 0.5px solid var(--border2);
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: var(--text3);
+      margin: 0 12px
+    }
+
+    /* ── SIDEBAR ── */
+    .app-shell {
+      display: flex;
+      height: 680px
+    }
+
+    .sidebar {
+      width: 220px;
+      min-width: 220px;
+      background: var(--ink);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0
+    }
+
+    .sidebar-logo {
+      padding: 0 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.08)
+    }
+
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .logo-mark svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff
+    }
+
+    .sidebar-logo-text span {
+      color: var(--accent2)
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 0
+    }
+
+    .nav-section {
+      padding: 0 20px 4px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.3);
+      margin-top: 16px;
+      margin-bottom: 6px
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 20px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      position: relative;
+      transition: .15s
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08)
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3px;
+      background: var(--accent2);
+      border-radius: 0 2px 2px 0
+    }
+
+    .nav-item svg {
+      width: 16px;
+      height: 16px;
+      opacity: .7
+    }
+
+    .nav-item.active svg {
+      opacity: 1
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 0.5px solid rgba(255, 255, 255, 0.08)
+    }
+
+    .avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff
+    }
+
+    .avatar-info p {
+      font-size: 12px;
+      color: #fff;
+      font-weight: 500
+    }
+
+    .avatar-info span {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4)
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--mist)
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      border-bottom: 0.5px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10
+    }
+
+    .topbar-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    .btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--font-body);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text2);
+      border: 0.5px solid var(--border2)
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .btn-primary:hover {
+      background: var(--accent2)
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px
+    }
+
+    .btn-danger {
+      background: var(--red-light);
+      color: var(--red);
+      border: 0.5px solid rgba(220, 38, 38, 0.2)
+    }
+
+    .btn-success {
+      background: var(--green-light);
+      color: var(--green);
+      border: 0.5px solid rgba(26, 158, 106, 0.2)
+    }
+
+    /* ── STATUS BADGES ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%
+    }
+
+    .badge-active {
+      background: var(--green-light);
+      color: var(--green)
+    }
+
+    .badge-active .badge-dot {
+      background: var(--green)
+    }
+
+    .badge-draft {
+      background: var(--mist2);
+      color: var(--text2)
+    }
+
+    .badge-draft .badge-dot {
+      background: var(--text3)
+    }
+
+    .badge-failed {
+      background: var(--red-light);
+      color: var(--red)
+    }
+
+    .badge-failed .badge-dot {
+      background: var(--red)
+    }
+
+    .badge-scheduled {
+      background: var(--blue-light);
+      color: var(--blue)
+    }
+
+    .badge-scheduled .badge-dot {
+      background: var(--blue)
+    }
+
+    .badge-ai {
+      background: var(--accent-light);
+      color: var(--accent)
+    }
+
+    /* ── SCREEN 1: DASHBOARD ── */
+    .dash-content {
+      padding: 28px
+    }
+
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 28px
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      border: 0.5px solid var(--border);
+      box-shadow: var(--shadow)
+    }
+
+    .stat-card .stat-label {
+      font-size: 11px;
+      color: var(--text3);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .8px
+    }
+
+    .stat-card .stat-val {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 4px
+    }
+
+    .stat-card .stat-delta {
+      font-size: 11px;
+      margin-top: 2px
+    }
+
+    .delta-up {
+      color: var(--green)
+    }
+
+    .delta-down {
+      color: var(--red)
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px
+    }
+
+    .section-head h2 {
+      font-size: 14px;
+      font-weight: 600
+    }
+
+    .workflow-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .workflow-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px 20px;
+      border: 0.5px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: .15s
+    }
+
+    .workflow-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 16px rgba(91, 79, 232, 0.1)
+    }
+
+    .wf-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0
+    }
+
+    .wf-info {
+      flex: 1
+    }
+
+    .wf-info h3 {
+      font-size: 14px;
+      font-weight: 600
+    }
+
+    .wf-info p {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 2px
+    }
+
+    .wf-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .wf-platforms {
+      display: flex;
+      gap: 4px
+    }
+
+    .platform-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff
+    }
+
+    .ig {
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743)
+    }
+
+    .li {
+      background: #0A66C2
+    }
+
+    .tw {
+      background: #1D9BF0
+    }
+
+    .wf-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center
+    }
+
+    .icon-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 0.5px solid var(--border2);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text2)
+    }
+
+    .icon-btn:hover {
+      background: var(--mist2)
+    }
+
+    /* ── SCREEN 2: CREATE WORKFLOW ── */
+    .create-wrap {
+      padding: 32px;
+      max-width: 640px;
+      margin: 0 auto
+    }
+
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 36px
+    }
+
+    .step-ind {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1
+    }
+
+    .step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--font-display);
+      flex-shrink: 0
+    }
+
+    .step-circle.done {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .step-circle.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 0 4px var(--accent-light)
+    }
+
+    .step-circle.todo {
+      background: var(--mist2);
+      color: var(--text3);
+      border: 0.5px solid var(--border2)
+    }
+
+    .step-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text2)
+    }
+
+    .step-name.active {
+      color: var(--accent);
+      font-weight: 600
+    }
+
+    .step-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border2);
+      margin: 0 8px
+    }
+
+    .step-line.done {
+      background: var(--accent)
+    }
+
+    .form-section {
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      border: 0.5px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px
+    }
+
+    .form-section h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .form-section p.sub {
+      font-size: 12px;
+      color: var(--text2);
+      margin-bottom: 20px
+    }
+
+    .field {
+      margin-bottom: 16px
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 6px;
+      letter-spacing: .3px
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 0.5px solid var(--border2);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      color: var(--text);
+      background: #fff;
+      outline: none
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light)
+    }
+
+    .trigger-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px
+    }
+
+    .trigger-card {
+      border: 1.5px solid var(--border2);
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      transition: .15s;
+      text-align: center
+    }
+
+    .trigger-card.selected {
+      border-color: var(--accent);
+      background: var(--accent-light)
+    }
+
+    .trigger-card .t-icon {
+      font-size: 24px;
+      margin-bottom: 8px
+    }
+
+    .trigger-card .t-name {
+      font-size: 12px;
+      font-weight: 600
+    }
+
+    .trigger-card .t-desc {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 2px
+    }
+
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px
+    }
+
+    .plat-card {
+      border: 1.5px solid var(--border2);
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: .15s
+    }
+
+    .plat-card.selected {
+      border-color: var(--accent);
+      background: var(--accent-light)
+    }
+
+    .plat-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0
+    }
+
+    .plat-card .p-name {
+      font-size: 12px;
+      font-weight: 600
+    }
+
+    .plat-card .p-handle {
+      font-size: 11px;
+      color: var(--text3)
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 20px
+    }
+
+    /* ── SCREEN 3: WORKFLOW BUILDER ── */
+    .builder-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100%
+    }
+
+    .builder-toolbar {
+      padding: 10px 20px;
+      background: #fff;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .builder-canvas {
+      flex: 1;
+      background: var(--mist);
+      padding: 32px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      position: relative
+    }
+
+    .canvas-bg {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(13, 13, 18, 0.06) 1px, transparent 1px);
+      background-size: 24px 24px
+    }
+
+    .flow-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0
+    }
+
+    .flow-step {
+      background: #fff;
+      border: 1.5px solid var(--border2);
+      border-radius: 14px;
+      padding: 14px 18px;
+      min-width: 260px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: .2s;
+      position: relative
+    }
+
+    .flow-step:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px rgba(91, 79, 232, 0.12)
+    }
+
+    .flow-step.active-step {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light)
+    }
+
+    .flow-step .fs-header {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .fs-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0
+    }
+
+    .fs-type {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 1px
+    }
+
+    .fs-title {
+      font-size: 13px;
+      font-weight: 600
+    }
+
+    .fs-desc {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 6px;
+      padding-left: 42px
+    }
+
+    .flow-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 0;
+      color: var(--text3)
+    }
+
+    .flow-arrow svg {
+      width: 16px;
+      height: 16px
+    }
+
+    .flow-arrow .arr-line {
+      width: 1.5px;
+      height: 20px;
+      background: var(--border2)
+    }
+
+    .add-step-btn {
+      margin-top: 8px;
+      padding: 8px 16px;
+      border: 1.5px dashed var(--border2);
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text2);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      min-width: 260px;
+      text-align: center;
+      font-family: var(--font-body);
+      transition: .15s
+    }
+
+    .add-step-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-light)
+    }
+
+    .step-badge {
+      position: absolute;
+      top: -8px;
+      right: 10px
+    }
+
+    .builder-right-panel {
+      width: 0;
+      background: #fff;
+      border-left: 0.5px solid var(--border);
+      overflow: hidden;
+      transition: .3s
+    }
+
+    .builder-right-panel.open {
+      width: 260px
+    }
+
+    /* ── SCREEN 4: STEP CONFIG ── */
+    .config-panel {
+      padding: 20px;
+      height: 100%;
+      overflow-y: auto
+    }
+
+    .config-panel h3 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .config-panel .sub {
+      font-size: 11px;
+      color: var(--text2);
+      margin-bottom: 20px
+    }
+
+    .config-section {
+      margin-bottom: 18px
+    }
+
+    .config-section h4 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 10px
+    }
+
+    .config-field {
+      margin-bottom: 12px
+    }
+
+    .config-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 5px
+    }
+
+    .config-field select,
+    .config-field input {
+      width: 100%;
+      padding: 7px 10px;
+      border: 0.5px solid var(--border2);
+      border-radius: 7px;
+      font-size: 12px;
+      font-family: var(--font-body);
+      background: #fff;
+      color: var(--text)
+    }
+
+    .tone-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px
+    }
+
+    .tone-pill {
+      border: 1px solid var(--border2);
+      border-radius: 7px;
+      padding: 6px 8px;
+      font-size: 11px;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: .1s
+    }
+
+    .tone-pill.sel {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent)
+    }
+
+    .platform-config {
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .plat-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: var(--mist);
+      border-radius: 8px
+    }
+
+    .plat-row .plat-logo {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      font-size: 10px
+    }
+
+    .plat-row p {
+      flex: 1;
+      font-size: 12px;
+      font-weight: 500
+    }
+
+    .toggle {
+      width: 36px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      right: 3px;
+      top: 3px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff
+    }
+
+    .toggle.off {
+      background: var(--mist3)
+    }
+
+    .toggle.off::after {
+      right: auto;
+      left: 3px
+    }
+
+    .char-count {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px
+    }
+
+    .char-bar {
+      flex: 1;
+      height: 3px;
+      background: var(--mist2);
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 0 8px
+    }
+
+    .char-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--accent);
+      width: 68%
+    }
+
+    /* ── SCREEN 5: REVIEW & APPROVE ── */
+    .review-wrap {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: 100%;
+      overflow-y: auto
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .ai-banner {
+      background: var(--accent-light);
+      border: 0.5px solid rgba(91, 79, 232, 0.2);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--accent)
+    }
+
+    .ai-banner svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 1px
+    }
+
+    .preview-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 0.5px solid var(--border)
+    }
+
+    .preview-tab {
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text2);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -0.5px
+    }
+
+    .preview-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+      font-weight: 600
+    }
+
+    .post-preview {
+      background: #fff;
+      border-radius: 12px;
+      border: 0.5px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow)
+    }
+
+    .post-preview .pp-header {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 0.5px solid var(--border)
+    }
+
+    .pp-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff
+    }
+
+    .pp-handle {
+      font-size: 13px;
+      font-weight: 600
+    }
+
+    .pp-time {
+      font-size: 11px;
+      color: var(--text3)
+    }
+
+    .post-body {
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text)
+    }
+
+    .post-body .hashtag {
+      color: var(--accent);
+      font-weight: 500
+    }
+
+    .post-body .emoji {
+      font-size: 15px
+    }
+
+    .post-image {
+      height: 120px;
+      background: linear-gradient(135deg, #EEF0FF 0%, #E8F4FF 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text3);
+      font-size: 12px;
+      border-top: 0.5px solid var(--border)
+    }
+
+    .post-stats {
+      padding: 10px 14px;
+      display: flex;
+      gap: 16px;
+      border-top: 0.5px solid var(--border)
+    }
+
+    .post-stat {
+      font-size: 11px;
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .confidence-bar {
+      background: var(--mist);
+      border-radius: 10px;
+      padding: 12px 14px
+    }
+
+    .conf-label {
+      font-size: 11px;
+      color: var(--text2);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between
+    }
+
+    .conf-track {
+      height: 6px;
+      background: var(--mist2);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .conf-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--green);
+      width: 84%
+    }
+
+    .conf-val {
+      font-weight: 600;
+      color: var(--green)
+    }
+
+    .edit-textarea {
+      width: 100%;
+      border: 0.5px solid var(--border2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      resize: none;
+      height: 80px;
+      color: var(--text);
+      line-height: 1.6
+    }
+
+    .review-actions {
+      display: flex;
+      gap: 8px;
+      padding: 0
+    }
+
+    .btn-approve {
+      background: var(--green-light);
+      color: var(--green);
+      border: 0.5px solid rgba(26, 158, 106, 0.2);
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      justify-content: center
+    }
+
+    .btn-reject {
+      background: var(--red-light);
+      color: var(--red);
+      border: 0.5px solid rgba(220, 38, 38, 0.2);
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .btn-regen {
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 0.5px solid rgba(91, 79, 232, 0.2);
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .suggestion-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px
+    }
+
+    .sug-pill {
+      background: var(--mist);
+      border: 0.5px solid var(--border2);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: var(--text2);
+      cursor: pointer
+    }
+
+    .sug-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-light)
+    }
+
+    /* ── SCREEN 6: EXECUTION STATUS ── */
+    .exec-wrap {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: 100%;
+      overflow-y: auto
+    }
+
+    .exec-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px
+    }
+
+    .exec-stat {
+      background: #fff;
+      border-radius: 10px;
+      padding: 12px;
+      border: 0.5px solid var(--border);
+      text-align: center
+    }
+
+    .exec-stat .es-val {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 2px
+    }
+
+    .exec-stat .es-label {
+      font-size: 11px;
+      color: var(--text2)
+    }
+
+    .exec-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .exec-item {
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow)
+    }
+
+    .exec-status-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0
+    }
+
+    .exec-item .ei-info {
+      flex: 1
+    }
+
+    .exec-item .ei-title {
+      font-size: 13px;
+      font-weight: 600
+    }
+
+    .exec-item .ei-time {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 1px
+    }
+
+    .exec-item .ei-platform {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px
+    }
+
+    .error-card {
+      background: var(--red-light);
+      border: 0.5px solid rgba(220, 38, 38, 0.2);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: -4px
+    }
+
+    .error-card .err-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--red);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .error-card .err-msg {
+      font-size: 11px;
+      color: var(--red);
+      opacity: .85;
+      line-height: 1.5
+    }
+
+    .err-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px
+    }
+
+    .progress-ring {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--mist);
+      border-radius: 10px;
+      padding: 12px 14px
+    }
+
+    .ring-svg {
+      flex-shrink: 0
+    }
+
+    .ring-info h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px
+    }
+
+    .ring-info p {
+      font-size: 11px;
+      color: var(--text2)
+    }
+
+    .ring-steps {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px
+    }
+
+    .ring-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text2)
+    }
+
+    .ring-step .rs-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    /* ── DESIGN TOKENS PANEL ── */
+    .tokens-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      border: 0.5px solid var(--border)
+    }
+
+    .token-swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 0.5px solid var(--border2)
+    }
+
+    .token-label {
+      font-size: 10px;
+      color: var(--text3);
+      margin-top: 4px;
+      text-align: center
+    }
+
+    svg {
+      overflow: visible
+    }
+
+    /* ── APP MODE ── */
+    body.app-mode {
+      padding: 0;
+      min-width: unset;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    body.app-mode .design-header {
+      display: none;
+    }
+
+    body.app-mode .screen-label {
+      display: none;
+    }
+
+    body.app-mode .screen-wrap {
+      display: none;
+      margin-bottom: 0;
+      height: 100vh;
+    }
+
+    body.app-mode .screen-wrap.active {
+      display: block;
+    }
+
+    body.app-mode .frame {
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.app-mode .app-shell {
+      height: 100%;
+      flex: 1;
+    }
+
+    body.app-mode .frame-chrome {
+      display: none;
+    }
+  </style>
+
+<body>
+
+  <div class="design-header">
+    <h1>Flowmatic</h1>
+    <p>AI Social Media Workflow Builder — Complete Design System · 6 Screens</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════ SCREEN 1 ═══ -->
+  <div class="screen-wrap" id="screen-dashboard">
+    <div class="screen-label"><span>1</span> Workflow Dashboard</div>
+    <div class="frame">
+      <div class="frame-chrome">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+        <div class="url-bar">app.flowmatic.ai/workflows</div>
+      </div>
+      <div class="app-shell">
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-logo">
+            <div class="logo-mark"><svg viewBox="0 0 16 16">
+                <path d="M3 8h10M8 3v10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="8" cy="8" r="3" stroke="#fff" stroke-width="1.5" />
+              </svg></div>
+            <div class="sidebar-logo-text">Flow<span>matic</span></div>
+          </div>
+          <div class="sidebar-nav">
+            <div class="nav-section">Main</div>
+            <div class="nav-item active">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="5" height="5" rx="1" />
+                <rect x="9" y="2" width="5" height="5" rx="1" />
+                <rect x="2" y="9" width="5" height="5" rx="1" />
+                <rect x="9" y="9" width="5" height="5" rx="1" />
+              </svg>
+              Workflows
+            </div>
+            <div class="nav-item">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="8" cy="8" r="6" />
+                <path d="M8 5v3l2 2" />
+              </svg>
+              Schedule
+            </div>
+            <div class="nav-item">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M2 10l4-4 3 3 5-6" />
+              </svg>
+              Analytics
+            </div>
+            <div class="nav-section">Content</div>
+            <div class="nav-item">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="3" width="12" height="10" rx="2" />
+                <path d="M5 7h6M5 10h4" />
+              </svg>
+              Templates
+            </div>
+            <div class="nav-item">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="8" cy="6" r="3" />
+                <path d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5" />
+              </svg>
+              Brand Voice
+            </div>
+            <div class="nav-section">Settings</div>
+            <div class="nav-item">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="8" cy="8" r="2" />
+                <path
+                  d="M8 2v2M8 12v2M2 8h2M12 8h2M3.9 3.9l1.4 1.4M10.7 10.7l1.4 1.4M3.9 12.1l1.4-1.4M10.7 5.3l1.4-1.4" />
+              </svg>
+              Integrations
+            </div>
+          </div>
+          <div class="sidebar-footer">
+            <div class="avatar-row">
+              <div class="avatar">R</div>
+              <div class="avatar-info">
+                <p>Rashvandh</p>
+                <span>Pro Plan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Main -->
+        <div class="main">
+          <div class="topbar">
+            <div class="topbar-title">My Workflows</div>
+            <div class="topbar-actions">
+              <button class="btn btn-ghost btn-sm">Filter</button>
+              <button class="btn btn-primary btn-sm">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2v8M2 6h8" />
+                </svg>
+                New Workflow
+              </button>
+            </div>
+          </div>
+          <div class="dash-content">
+            <div class="dash-stats">
+              <div class="stat-card">
+                <div class="stat-label">Active Workflows</div>
+                <div class="stat-val" style="color:var(--accent)">6</div>
+                <div class="stat-delta delta-up">↑ 2 this week</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Posts Published</div>
+                <div class="stat-val">142</div>
+                <div class="stat-delta delta-up">↑ 23 this month</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Pending Review</div>
+                <div class="stat-val" style="color:var(--amber)">4</div>
+                <div class="stat-delta" style="color:var(--amber)">Needs attention</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Failed Posts</div>
+                <div class="stat-val" style="color:var(--red)">1</div>
+                <div class="stat-delta delta-down">Fix required</div>
+              </div>
+            </div>
+            <div class="section-head">
+              <h2>All Workflows</h2><button class="btn btn-ghost btn-sm">Sort by: Recent</button>
+            </div>
+            <div class="workflow-list">
+              <div class="workflow-card">
+                <div class="wf-icon" style="background:#EEF0FF;font-size:18px">🚀</div>
+                <div class="wf-info">
+                  <h3>Weekly Product Launch Posts</h3>
+                  <p>Every Monday · AI-generated · Multi-platform</p>
+                </div>
+                <div class="wf-meta">
+                  <div class="wf-platforms">
+                    <div class="platform-dot ig">I</div>
+                    <div class="platform-dot li">L</div>
+                    <div class="platform-dot tw">T</div>
+                  </div>
+                  <div class="badge badge-active">
+                    <div class="badge-dot"></div>Active
+                  </div>
+                </div>
+                <div class="wf-actions">
+                  <div class="icon-btn" title="Edit">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                      stroke-width="1.5">
+                      <path d="M8 2l2 2-6 6H2V8l6-6z" />
+                    </svg>
+                  </div>
+                  <div class="icon-btn" title="Pause">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                      stroke-width="1.5">
+                      <rect x="2" y="2" width="3" height="8" rx="1" />
+                      <rect x="7" y="2" width="3" height="8" rx="1" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div class="workflow-card">
+                <div class="wf-icon" style="background:#FEF3CD;font-size:18px">✍️</div>
+                <div class="wf-info">
+                  <h3>Daily Blog Excerpt Sharing</h3>
+                  <p>Daily 9am · AI-optimized · LinkedIn, Twitter</p>
+                </div>
+                <div class="wf-meta">
+                  <div class="wf-platforms">
+                    <div class="platform-dot li">L</div>
+                    <div class="platform-dot tw">T</div>
+                  </div>
+                  <div class="badge badge-active">
+                    <div class="badge-dot"></div>Active
+                  </div>
+                </div>
+                <div class="wf-actions">
+                  <div class="icon-btn"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                      stroke="currentColor" stroke-width="1.5">
+                      <path d="M8 2l2 2-6 6H2V8l6-6z" />
+                    </svg></div>
+                  <div class="icon-btn"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                      stroke="currentColor" stroke-width="1.5">
+                      <rect x="2" y="2" width="3" height="8" rx="1" />
+                      <rect x="7" y="2" width="3" height="8" rx="1" />
+                    </svg></div>
+                </div>
+              </div>
+              <div class="workflow-card" style="opacity:.75">
+                <div class="wf-icon" style="background:var(--mist2);font-size:18px">🎯</div>
+                <div class="wf-info">
+                  <h3>Campaign Promo Series</h3>
+                  <p>Not scheduled · Setup incomplete</p>
+                </div>
+                <div class="wf-meta">
+                  <div class="wf-platforms">
+                    <div class="platform-dot ig">I</div>
+                  </div>
+                  <div class="badge badge-draft">
+                    <div class="badge-dot"></div>Draft
+                  </div>
+                </div>
+                <div class="wf-actions">
+                  <div class="icon-btn"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                      stroke="currentColor" stroke-width="1.5">
+                      <path d="M8 2l2 2-6 6H2V8l6-6z" />
+                    </svg></div>
+                </div>
+              </div>
+              <div class="workflow-card" style="border-color:rgba(220,38,38,0.25)">
+                <div class="wf-icon" style="background:var(--red-light);font-size:18px">⚠️</div>
+                <div class="wf-info">
+                  <h3>Instagram Stories Auto-Post</h3>
+                  <p>Failed at Publish step · 2 hours ago</p>
+                </div>
+                <div class="wf-meta">
+                  <div class="wf-platforms">
+                    <div class="platform-dot ig">I</div>
+                  </div>
+                  <div class="badge badge-failed">
+                    <div class="badge-dot"></div>Failed
+                  </div>
+                </div>
+                <div class="wf-actions">
+                  <button class="btn btn-danger btn-sm">Fix</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ SCREEN 2 ═══ -->
+  <div class="screen-wrap" id="screen-create">
+    <div class="screen-label"><span>2</span> Create Workflow — Setup & Trigger</div>
+    <div class="frame">
+      <div class="frame-chrome">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+        <div class="url-bar">app.flowmatic.ai/workflows/new</div>
+      </div>
+      <div class="app-shell">
+        <div class="sidebar">
+          <div class="sidebar-logo">
+            <div class="logo-mark"><svg viewBox="0 0 16 16">
+                <path d="M3 8h10M8 3v10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="8" cy="8" r="3" stroke="#fff" stroke-width="1.5" />
+              </svg></div>
+            <div class="sidebar-logo-text">Flow<span>matic</span></div>
+          </div>
+          <div class="sidebar-nav">
+            <div class="nav-item active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="5" height="5" rx="1" />
+                <rect x="9" y="2" width="5" height="5" rx="1" />
+                <rect x="2" y="9" width="5" height="5" rx="1" />
+                <rect x="9" y="9" width="5" height="5" rx="1" />
+              </svg>Workflows</div>
+            <div class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="8" cy="8" r="6" />
+                <path d="M8 5v3l2 2" />
+              </svg>Schedule</div>
+            <div class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M2 10l4-4 3 3 5-6" />
+              </svg>Analytics</div>
+          </div>
+          <div class="sidebar-footer">
+            <div class="avatar-row">
+              <div class="avatar">R</div>
+              <div class="avatar-info">
+                <p> Rashvandh</p><span>Pro Plan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="topbar">
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn btn-ghost btn-sm">← Back</button>
+              <div class="topbar-title">Create New Workflow</div>
+            </div>
+            <button class="btn btn-ghost btn-sm">Save Draft</button>
+          </div>
+          <div class="create-wrap">
+            <div class="step-indicator">
+              <div class="step-ind">
+                <div class="step-circle active">1</div>
+                <div class="step-name active">Setup</div>
+              </div>
+              <div class="step-line"></div>
+              <div class="step-ind">
+                <div class="step-circle todo">2</div>
+                <div class="step-name">Build Steps</div>
+              </div>
+              <div class="step-line"></div>
+              <div class="step-ind">
+                <div class="step-circle todo">3</div>
+                <div class="step-name">Review</div>
+              </div>
+              <div class="step-line"></div>
+              <div class="step-ind">
+                <div class="step-circle todo">4</div>
+                <div class="step-name">Launch</div>
+              </div>
+            </div>
+            <div class="form-section">
+              <h3>Name your workflow</h3>
+              <p class="sub">Give it a clear name so you know what it does at a glance.</p>
+              <div class="field">
+                <label>Workflow Name</label>
+                <input type="text" value="Weekly Product Update Posts" style="border-color:var(--accent)" />
+              </div>
+            </div>
+            <div class="form-section">
+              <h3>When should this run?</h3>
+              <p class="sub">Choose what kicks off your workflow.</p>
+              <div class="trigger-grid">
+                <div class="trigger-card selected">
+                  <div class="t-icon">🕐</div>
+                  <div class="t-name">Scheduled</div>
+                  <div class="t-desc">Run on a set time</div>
+                </div>
+                <div class="trigger-card">
+                  <div class="t-icon">👆</div>
+                  <div class="t-name">Manual</div>
+                  <div class="t-desc">Run when you click</div>
+                </div>
+                <div class="trigger-card">
+                  <div class="t-icon">⚡</div>
+                  <div class="t-name">Event-based</div>
+                  <div class="t-desc">Triggered by an action</div>
+                </div>
+              </div>
+              <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div class="field">
+                  <label>Repeat</label>
+                  <select>
+                    <option>Every Week</option>
+                    <option>Every Day</option>
+                    <option>Every Month</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Time</label>
+                  <input type="time" value="09:00" />
+                </div>
+              </div>
+            </div>
+            <div class="form-section">
+              <h3>Post to which platforms?</h3>
+              <p class="sub">You can customise each platform's content in the next step.</p>
+              <div class="platform-grid">
+                <div class="plat-card selected">
+                  <div class="plat-logo ig">I</div>
+                  <div>
+                    <div class="p-name">Instagram</div>
+                    <div class="p-handle">@Rashvandh</div>
+                  </div>
+                </div>
+                <div class="plat-card selected">
+                  <div class="plat-logo li">L</div>
+                  <div>
+                    <div class="p-name">LinkedIn</div>
+                    <div class="p-handle">Rashvandh</div>
+                  </div>
+                </div>
+                <div class="plat-card">
+                  <div class="plat-logo tw">T</div>
+                  <div>
+                    <div class="p-name">Twitter/X</div>
+                    <div class="p-handle">@Rashvandh</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-ghost">Cancel</button>
+              <button class="btn btn-primary">Continue to Builder →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ SCREEN 3 ═══ -->
+  <div class="screen-wrap" id="screen-builder">
+    <div class="screen-label"><span>3</span> Workflow Builder — Visual Flow</div>
+    <div class="frame">
+      <div class="frame-chrome">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+        <div class="url-bar">app.flowmatic.ai/workflows/wf-042/build</div>
+      </div>
+      <div class="app-shell">
+        <div class="sidebar">
+          <div class="sidebar-logo">
+            <div class="logo-mark"><svg viewBox="0 0 16 16">
+                <path d="M3 8h10M8 3v10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="8" cy="8" r="3" stroke="#fff" stroke-width="1.5" />
+              </svg></div>
+            <div class="sidebar-logo-text">Flow<span>matic</span></div>
+          </div>
+          <div class="sidebar-nav">
+            <div class="nav-item active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="5" height="5" rx="1" />
+                <rect x="9" y="2" width="5" height="5" rx="1" />
+                <rect x="2" y="9" width="5" height="5" rx="1" />
+                <rect x="9" y="9" width="5" height="5" rx="1" />
+              </svg>Workflows</div>
+            <div class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="8" cy="8" r="6" />
+                <path d="M8 5v3l2 2" />
+              </svg>Schedule</div>
+          </div>
+          <div class="sidebar-footer">
+            <div class="avatar-row">
+              <div class="avatar">R</div>
+              <div class="avatar-info">
+                <p> Rashvandh</p><span>Pro Plan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="main" style="display:flex;flex-direction:column">
+          <div class="topbar">
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn btn-ghost btn-sm">← Back</button>
+              <div>
+                <div class="topbar-title">Weekly Product Update Posts</div>
+                <div style="font-size:11px;color:var(--text3)">Runs every Monday 9:00am · Instagram, LinkedIn</div>
+              </div>
+            </div>
+            <div class="topbar-actions">
+              <div class="badge badge-draft">
+                <div class="badge-dot"></div>Draft
+              </div>
+              <button class="btn btn-ghost btn-sm">Test Run</button>
+              <button class="btn btn-primary btn-sm">Activate</button>
+            </div>
+          </div>
+          <div style="display:flex;flex:1;overflow:hidden">
+            <!-- Canvas -->
+            <div class="builder-canvas" style="flex:1">
+              <div class="canvas-bg"></div>
+              <div class="flow-container">
+                <!-- Step 1 -->
+                <div class="flow-step" style="border-color:var(--border2)">
+                  <div class="fs-header">
+                    <div class="fs-icon" style="background:#EEF0FF">⏰</div>
+                    <div>
+                      <div class="fs-type">Trigger</div>
+                      <div class="fs-title">Scheduled Start</div>
+                    </div>
+                  </div>
+                  <div class="fs-desc">Every Monday at 9:00am</div>
+                </div>
+                <div class="flow-arrow">
+                  <div class="arr-line"></div><svg viewBox="0 0 16 16" fill="none" stroke="var(--text3)"
+                    stroke-width="1.5">
+                    <path d="M8 3v10M3 8l5 5 5-5" />
+                  </svg>
+                </div>
+                <!-- Step 2 -->
+                <div class="flow-step" style="border-color:var(--accent)">
+                  <div class="step-badge">
+                    <div class="badge badge-ai">AI Step</div>
+                  </div>
+                  <div class="fs-header">
+                    <div class="fs-icon" style="background:var(--accent-light)">✨</div>
+                    <div>
+                      <div class="fs-type">AI Generate</div>
+                      <div class="fs-title">Create Post Content</div>
+                    </div>
+                  </div>
+                  <div class="fs-desc">Tone: Professional · Format: Short post · Audience: SMB owners</div>
+                </div>
+                <div class="flow-arrow">
+                  <div class="arr-line"></div><svg viewBox="0 0 16 16" fill="none" stroke="var(--text3)"
+                    stroke-width="1.5">
+                    <path d="M8 3v10M3 8l5 5 5-5" />
+                  </svg>
+                </div>
+                <!-- Step 3 -->
+                <div class="flow-step">
+                  <div class="fs-header">
+                    <div class="fs-icon" style="background:#E5F7EF">👁</div>
+                    <div>
+                      <div class="fs-type">Human Review</div>
+                      <div class="fs-title">Review &amp; Approve</div>
+                    </div>
+                  </div>
+                  <div class="fs-desc">Pause for manual approval before publishing</div>
+                </div>
+                <div class="flow-arrow">
+                  <div class="arr-line"></div><svg viewBox="0 0 16 16" fill="none" stroke="var(--text3)"
+                    stroke-width="1.5">
+                    <path d="M8 3v10M3 8l5 5 5-5" />
+                  </svg>
+                </div>
+                <!-- Step 4 -->
+                <div class="flow-step">
+                  <div class="fs-header">
+                    <div class="fs-icon" style="background:#DBEEFF">🚀</div>
+                    <div>
+                      <div class="fs-type">Publish</div>
+                      <div class="fs-title">Post to Platforms</div>
+                    </div>
+                  </div>
+                  <div class="fs-desc">Instagram + LinkedIn · Publish immediately on approval</div>
+                </div>
+                <button class="add-step-btn">+ Add a Step</button>
+              </div>
+            </div>
+            <!-- Right: Step Library -->
+            <div style="width:220px;background:#fff;border-left:0.5px solid var(--border);padding:16px;overflow-y:auto">
+              <div
+                style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);margin-bottom:12px">
+                Add Step</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div
+                  style="padding:10px 12px;border:0.5px solid var(--border2);border-radius:10px;cursor:pointer;transition:.15s"
+                  onmouseover="this.style.borderColor='var(--accent)'"
+                  onmouseout="this.style.borderColor='var(--border2)'">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span
+                      style="font-size:14px">✨</span><span style="font-size:12px;font-weight:600">AI Generate</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text3)">Create content with AI</div>
+                </div>
+                <div
+                  style="padding:10px 12px;border:0.5px solid var(--border2);border-radius:10px;cursor:pointer;transition:.15s">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span
+                      style="font-size:14px">🔁</span><span style="font-size:12px;font-weight:600">Remix Content</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text3)">Rewrite for new platform</div>
+                </div>
+                <div
+                  style="padding:10px 12px;border:0.5px solid var(--border2);border-radius:10px;cursor:pointer;transition:.15s">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span
+                      style="font-size:14px">👁</span><span style="font-size:12px;font-weight:600">Review Step</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text3)">Pause for human check</div>
+                </div>
+                <div
+                  style="padding:10px 12px;border:0.5px solid var(--border2);border-radius:10px;cursor:pointer;transition:.15s">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span
+                      style="font-size:14px">⏳</span><span style="font-size:12px;font-weight:600">Wait / Delay</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text3)">Pause before next step</div>
+                </div>
+                <div
+                  style="padding:10px 12px;border:0.5px solid var(--border2);border-radius:10px;cursor:pointer;transition:.15s">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span
+                      style="font-size:14px">🖼</span><span style="font-size:12px;font-weight:600">Add Image</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text3)">Attach or generate image</div>
+                </div>
+                <div
+                  style="padding:10px 12px;border:0.5px solid var(--border2);border-radius:10px;cursor:pointer;transition:.15s">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span
+                      style="font-size:14px">🚀</span><span style="font-size:12px;font-weight:600">Publish</span></div>
+                  <div style="font-size:11px;color:var(--text3)">Post to social platforms</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ SCREEN 4 ═══ -->
+  <div class="screen-wrap" id="screen-config">
+    <div class="screen-label"><span>4</span> Step Configuration — AI & Content Control</div>
+    <div class="frame">
+      <div class="frame-chrome">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+        <div class="url-bar">app.flowmatic.ai/workflows/wf-042/build · step:ai-generate</div>
+      </div>
+      <div class="app-shell">
+        <div class="sidebar">
+          <div class="sidebar-logo">
+            <div class="logo-mark"><svg viewBox="0 0 16 16">
+                <path d="M3 8h10M8 3v10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="8" cy="8" r="3" stroke="#fff" stroke-width="1.5" />
+              </svg></div>
+            <div class="sidebar-logo-text">Flow<span>matic</span></div>
+          </div>
+          <div class="sidebar-nav">
+            <div class="nav-item active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="5" height="5" rx="1" />
+                <rect x="9" y="2" width="5" height="5" rx="1" />
+                <rect x="2" y="9" width="5" height="5" rx="1" />
+                <rect x="9" y="9" width="5" height="5" rx="1" />
+              </svg>Workflows</div>
+          </div>
+          <div class="sidebar-footer">
+            <div class="avatar-row">
+              <div class="avatar">R</div>
+              <div class="avatar-info">
+                <p>Rashvandh</p><span>Pro Plan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="main" style="display:flex;flex-direction:column">
+          <div class="topbar">
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn btn-ghost btn-sm">← Builder</button>
+              <div class="topbar-title">Configure: AI Generate</div>
+            </div>
+            <div class="topbar-actions">
+              <button class="btn btn-ghost btn-sm">Preview Output</button>
+              <button class="btn btn-primary btn-sm">Save Step</button>
+            </div>
+          </div>
+          <div style="display:flex;flex:1;overflow:hidden">
+            <!-- Config Form -->
+            <div style="flex:1;overflow-y:auto;padding:24px">
+              <div class="ai-banner" style="margin-bottom:20px">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="8" cy="8" r="6" />
+                  <path d="M8 5v4M8 11v.5" />
+                </svg>
+                <div>The AI will write content based on your settings below. You'll get to review and edit before
+                  anything is posted.</div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+                <div>
+                  <div class="config-section">
+                    <h4>Content Instructions</h4>
+                    <div class="config-field">
+                      <label>What should the AI write about?</label>
+                      <textarea
+                        style="width:100%;border:0.5px solid var(--accent);border-radius:8px;padding:9px 12px;font-size:13px;font-family:var(--font-body);height:80px;resize:none;color:var(--text);line-height:1.6">Write about our latest product update, highlighting 3 key new features. Focus on how it saves time for small business owners.</textarea>
+                    </div>
+                    <div class="config-field">
+                      <label>Target Audience</label>
+                      <select>
+                        <option selected>Small business owners</option>
+                        <option>Marketing teams</option>
+                        <option>General public</option>
+                        <option>Tech professionals</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="config-section">
+                    <h4>Tone &amp; Style</h4>
+                    <div class="tone-grid">
+                      <div class="tone-pill sel">Professional</div>
+                      <div class="tone-pill">Friendly</div>
+                      <div class="tone-pill">Bold</div>
+                      <div class="tone-pill">Inspirational</div>
+                      <div class="tone-pill">Educational</div>
+                      <div class="tone-pill">Casual</div>
+                    </div>
+                  </div>
+                  <div class="config-section">
+                    <h4>Format</h4>
+                    <div class="config-field">
+                      <label>Post Format</label>
+                      <select>
+                        <option>Short post (under 150 words)</option>
+                        <option>Long post (150–300 words)</option>
+                        <option>Bullet points</option>
+                        <option>Story-style</option>
+                      </select>
+                    </div>
+                    <div class="config-field">
+                      <label>Include hashtags?</label>
+                      <select>
+                        <option>Yes — 3 to 5 hashtags</option>
+                        <option>Yes — 1 to 2 hashtags</option>
+                        <option>No hashtags</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="config-section">
+                    <h4>Platform-specific Settings</h4>
+                    <div class="platform-config">
+                      <div class="plat-row">
+                        <div class="plat-logo ig"
+                          style="width:22px;height:22px;border-radius:5px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff">
+                          I</div>
+                        <p>Instagram</p>
+                        <div class="toggle"></div>
+                      </div>
+                      <div
+                        style="padding:8px 10px 10px;background:var(--accent-light);border-radius:0 0 8px 8px;margin-top:-8px;border:0.5px solid rgba(91,79,232,0.15);border-top:none">
+                        <div class="config-field" style="margin-bottom:8px">
+                          <label>Caption length</label>
+                          <select style="font-size:11px">
+                            <option>Short (under 80 chars)</option>
+                            <option selected>Medium (80–150 chars)</option>
+                          </select>
+                        </div>
+                        <div class="char-count"><span style="font-size:11px;color:var(--text3)">Max length</span>
+                          <div class="char-bar">
+                            <div class="char-fill"></div>
+                          </div><span style="font-size:11px;color:var(--accent);font-weight:600">102 / 150</span>
+                        </div>
+                      </div>
+                      <div class="plat-row" style="margin-top:4px">
+                        <div class="plat-logo li"
+                          style="width:22px;height:22px;border-radius:5px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff">
+                          L</div>
+                        <p>LinkedIn</p>
+                        <div class="toggle"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="config-section">
+                    <h4>AI Behaviour</h4>
+                    <div class="config-field">
+                      <label>Creativity level</label>
+                      <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+                        <span style="font-size:11px;color:var(--text3)">Conservative</span>
+                        <input type="range" min="0" max="100" value="65" style="flex:1" />
+                        <span style="font-size:11px;color:var(--text3)">Creative</span>
+                      </div>
+                    </div>
+                    <div class="config-field">
+                      <label>Number of variations to generate</label>
+                      <select>
+                        <option>1 version</option>
+                        <option selected>2 versions to compare</option>
+                        <option>3 versions</option>
+                      </select>
+                    </div>
+                    <div
+                      style="padding:10px 12px;background:var(--mist);border-radius:8px;font-size:11px;color:var(--text2);line-height:1.6">
+                      💡 <strong>Tip:</strong> Generating 2 versions lets you pick the best one at review time —
+                      recommended for important campaigns.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ SCREEN 5 ═══ -->
+  <div class="screen-wrap" id="screen-review">
+    <div class="screen-label"><span>5</span> Review & Approval</div>
+    <div class="frame">
+      <div class="frame-chrome">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+        <div class="url-bar">app.flowmatic.ai/review/pending · 4 awaiting review</div>
+      </div>
+      <div class="app-shell">
+        <div class="sidebar">
+          <div class="sidebar-logo">
+            <div class="logo-mark"><svg viewBox="0 0 16 16">
+                <path d="M3 8h10M8 3v10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="8" cy="8" r="3" stroke="#fff" stroke-width="1.5" />
+              </svg></div>
+            <div class="sidebar-logo-text">Flow<span>matic</span></div>
+          </div>
+          <div class="sidebar-nav">
+            <div class="nav-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="5" height="5" rx="1" />
+                <rect x="9" y="2" width="5" height="5" rx="1" />
+                <rect x="2" y="9" width="5" height="5" rx="1" />
+                <rect x="9" y="9" width="5" height="5" rx="1" />
+              </svg>Workflows</div>
+            <div class="nav-item active" style="color:#fff;background:rgba(255,255,255,0.08)"><svg viewBox="0 0 16 16"
+                fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M2 4h12M2 8h8M2 12h10" />
+              </svg>Review Queue <span
+                style="margin-left:4px;background:var(--accent);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700">4</span>
+            </div>
+          </div>
+          <div class="sidebar-footer">
+            <div class="avatar-row">
+              <div class="avatar">R</div>
+              <div class="avatar-info">
+                <p> Rashvandh</p><span>Pro Plan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="topbar">
+            <div class="topbar-title">Review &amp; Approve</div>
+            <div class="topbar-actions">
+              <span style="font-size:12px;color:var(--text3)">1 of 4 pending</span>
+              <button class="btn btn-ghost btn-sm">← Previous</button>
+              <button class="btn btn-ghost btn-sm">Next →</button>
+            </div>
+          </div>
+          <div class="review-wrap">
+            <div class="review-header">
+              <div>
+                <div style="font-size:15px;font-weight:700">Weekly Product Update Posts</div>
+                <div style="font-size:12px;color:var(--text2);margin-top:2px">Generated today · 2 variations available
+                </div>
+              </div>
+              <div class="badge badge-ai">AI Generated</div>
+            </div>
+            <div class="ai-banner">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="8" cy="8" r="6" />
+                <path d="M5 8l2 2 4-4" />
+              </svg>
+              <div><strong>AI Confidence: 84%</strong> — This content matches your brand voice closely. Minor tweak
+                suggested: consider adding a call-to-action at the end.</div>
+            </div>
+            <div class="preview-tabs">
+              <div class="preview-tab active">Version A</div>
+              <div class="preview-tab">Version B</div>
+              <div class="preview-tab">Instagram Preview</div>
+              <div class="preview-tab">LinkedIn Preview</div>
+            </div>
+            <div class="post-preview">
+              <div class="pp-header">
+                <div class="pp-avatar">R</div>
+                <div>
+                  <div class="pp-handle">@Rashvandh</div>
+                  <div class="pp-time">Will post Monday, 9:00am</div>
+                </div>
+                <div style="margin-left:auto">
+                  <div class="platform-dot ig" style="width:22px;height:22px">I</div>
+                </div>
+              </div>
+              <div class="post-body">
+                <span class="emoji">🚀</span> Big news for small business owners — our latest update just made running
+                your brand <strong>a whole lot easier</strong>.<br><br>
+                3 things you'll love:<br>
+                → Auto-scheduling that actually works<br>
+                → AI content that sounds like <em>you</em><br>
+                → One dashboard for every platform<br><br>
+                Less time posting. More time building. <span class="emoji">💼</span><br><br>
+                <span class="hashtag">#SmallBusiness</span> <span class="hashtag">#ContentMarketing</span> <span
+                  class="hashtag">#Automation</span>
+              </div>
+              <div class="post-image">📷 Featured image will appear here (auto-attached)</div>
+              <div class="post-stats">
+                <div class="post-stat">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M6 2C3.8 2 2 3.8 2 6c0 .8.2 1.5.6 2.1L2 10l1.9-.6A4 4 0 106 2z" />
+                  </svg>
+                  Estimated reach: High
+                </div>
+                <div class="post-stat">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M6 1l1.3 2.7L10 4.1 8 6l.5 3L6 7.7 3.5 9 4 6 2 4.1l2.7-.4L6 1z" />
+                  </svg>
+                  Engagement score: 8.4/10
+                </div>
+              </div>
+            </div>
+            <div class="confidence-bar">
+              <div class="conf-label"><span>AI confidence in this content</span><span class="conf-val">84%</span></div>
+              <div class="conf-track">
+                <div class="conf-fill"></div>
+              </div>
+              <div style="margin-top:8px;font-size:11px;color:var(--text2)">Suggestion: Add a link or CTA button to
+                increase click-through rates.</div>
+              <div class="suggestion-pills">
+                <div class="sug-pill">+ Add CTA button</div>
+                <div class="sug-pill">Make it shorter</div>
+                <div class="sug-pill">More emojis</div>
+                <div class="sug-pill">Sound more casual</div>
+              </div>
+            </div>
+            <div style="background:#fff;border-radius:12px;padding:14px;border:0.5px solid var(--border)">
+              <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--text2)">Edit before posting</div>
+              <textarea class="edit-textarea">🚀 Big news for small business owners — our latest update just made running your brand a whole lot easier.
+
+3 things you'll love:
+→ Auto-scheduling that actually works
+→ AI content that sounds like you
+→ One dashboard for every platform</textarea>
+            </div>
+            <div class="review-actions">
+              <button class="btn-approve">✓ Approve &amp; Schedule</button>
+              <button class="btn-regen">↻ Regenerate</button>
+              <button class="btn-reject">✕ Reject</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ SCREEN 6 ═══ -->
+  <div class="screen-wrap" id="screen-status">
+    <div class="screen-label"><span>6</span> Execution & Status View</div>
+    <div class="frame">
+      <div class="frame-chrome">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+        <div class="url-bar">app.flowmatic.ai/workflows/wf-042/status</div>
+      </div>
+      <div class="app-shell">
+        <div class="sidebar">
+          <div class="sidebar-logo">
+            <div class="logo-mark"><svg viewBox="0 0 16 16">
+                <path d="M3 8h10M8 3v10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="8" cy="8" r="3" stroke="#fff" stroke-width="1.5" />
+              </svg></div>
+            <div class="sidebar-logo-text">Flow<span>matic</span></div>
+          </div>
+          <div class="sidebar-nav">
+            <div class="nav-item active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="5" height="5" rx="1" />
+                <rect x="9" y="2" width="5" height="5" rx="1" />
+                <rect x="2" y="9" width="5" height="5" rx="1" />
+                <rect x="9" y="9" width="5" height="5" rx="1" />
+              </svg>Workflows</div>
+          </div>
+          <div class="sidebar-footer">
+            <div class="avatar-row">
+              <div class="avatar">R</div>
+              <div class="avatar-info">
+                <p> Rashvandh</p><span>Pro Plan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="topbar">
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn btn-ghost btn-sm">← Back</button>
+              <div>
+                <div class="topbar-title">Weekly Product Update Posts</div>
+                <div style="font-size:11px;color:var(--text3)">Last run: Today, 9:00am</div>
+              </div>
+            </div>
+            <div class="topbar-actions">
+              <div class="badge badge-active">
+                <div class="badge-dot"></div>Active
+              </div>
+              <button class="btn btn-ghost btn-sm">View History</button>
+              <button class="btn btn-primary btn-sm">▶ Run Now</button>
+            </div>
+          </div>
+          <div class="exec-wrap">
+            <div class="exec-summary">
+              <div class="exec-stat">
+                <div class="es-val" style="color:var(--green)">18</div>
+                <div class="es-label">Published</div>
+              </div>
+              <div class="exec-stat">
+                <div class="es-val" style="color:var(--blue)">2</div>
+                <div class="es-label">Scheduled</div>
+              </div>
+              <div class="exec-stat">
+                <div class="es-val" style="color:var(--amber)">1</div>
+                <div class="es-label">Awaiting Review</div>
+              </div>
+              <div class="exec-stat">
+                <div class="es-val" style="color:var(--red)">1</div>
+                <div class="es-label">Failed</div>
+              </div>
+            </div>
+            <!-- Current run progress -->
+            <div
+              style="background:#fff;border-radius:12px;padding:16px;border:0.5px solid var(--border);box-shadow:var(--shadow)">
+              <div style="font-size:13px;font-weight:700;margin-bottom:12px">Current Run — Today 9:00am</div>
+              <div class="progress-ring">
+                <svg class="ring-svg" width="56" height="56" viewBox="0 0 56 56">
+                  <circle cx="28" cy="28" r="22" fill="none" stroke="var(--mist2)" stroke-width="4" />
+                  <circle cx="28" cy="28" r="22" fill="none" stroke="var(--green)" stroke-width="4"
+                    stroke-dasharray="138.16" stroke-dashoffset="34.5" stroke-linecap="round"
+                    transform="rotate(-90 28 28)" />
+                  <text x="28" y="33" text-anchor="middle" font-size="13" font-weight="700" fill="var(--text)"
+                    font-family="Syne,sans-serif">75%</text>
+                </svg>
+                <div class="ring-steps">
+                  <div class="ring-step">
+                    <div class="rs-dot" style="background:var(--green)"></div>Trigger fired at 9:00am
+                  </div>
+                  <div class="ring-step">
+                    <div class="rs-dot" style="background:var(--green)"></div>AI content generated (2 versions)
+                  </div>
+                  <div class="ring-step">
+                    <div class="rs-dot" style="background:var(--green)"></div>Approved by Rashvandh at 9:12am
+                  </div>
+                  <div class="ring-step" style="font-weight:600;color:var(--text)">
+                    <div class="rs-dot" style="background:var(--blue);animation:pulse 1.5s infinite"></div>Publishing to
+                    platforms…
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Timeline -->
+            <div class="section-head">
+              <h2>Recent Posts</h2><button class="btn btn-ghost btn-sm">Filter</button>
+            </div>
+            <div class="exec-timeline">
+              <div class="exec-item">
+                <div class="exec-status-icon" style="background:var(--green-light);font-size:14px">✓</div>
+                <div class="ei-info">
+                  <div class="ei-title">Weekly Product Update — Instagram</div>
+                  <div class="ei-time">Published today at 9:14am</div>
+                  <div class="ei-platform">
+                    <div class="platform-dot ig" style="width:16px;height:16px;font-size:8px">I</div>
+                  </div>
+                </div>
+                <div class="badge badge-active" style="flex-shrink:0">
+                  <div class="badge-dot"></div>Live
+                </div>
+              </div>
+              <div class="exec-item">
+                <div class="exec-status-icon" style="background:var(--blue-light);font-size:14px">🕐</div>
+                <div class="ei-info">
+                  <div class="ei-title">Weekly Product Update — LinkedIn</div>
+                  <div class="ei-time">Scheduled for today at 10:00am</div>
+                  <div class="ei-platform">
+                    <div class="platform-dot li" style="width:16px;height:16px;font-size:8px">L</div>
+                  </div>
+                </div>
+                <div class="badge badge-scheduled" style="flex-shrink:0">
+                  <div class="badge-dot"></div>Scheduled
+                </div>
+              </div>
+              <!-- Failed item -->
+              <div>
+                <div class="exec-item"
+                  style="border-color:rgba(220,38,38,0.25);border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:none">
+                  <div class="exec-status-icon" style="background:var(--red-light);font-size:14px">✗</div>
+                  <div class="ei-info">
+                    <div class="ei-title">Instagram Stories Auto-Post</div>
+                    <div class="ei-time">Failed today at 9:08am — Publish step</div>
+                    <div class="ei-platform">
+                      <div class="platform-dot ig" style="width:16px;height:16px;font-size:8px">I</div>
+                    </div>
+                  </div>
+                  <div class="badge badge-failed" style="flex-shrink:0">
+                    <div class="badge-dot"></div>Failed
+                  </div>
+                </div>
+                <div class="error-card" style="border-radius:0 0 12px 12px;border-top:none;margin-top:0">
+                  <div class="err-title">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                      stroke-width="1.5">
+                      <circle cx="6" cy="6" r="5" />
+                      <path d="M6 3v3M6 8.5v.5" />
+                    </svg>
+                    Instagram connection error
+                  </div>
+                  <div class="err-msg">The Instagram token expired. Please reconnect your account to continue posting.
+                    This affects 2 active workflows.</div>
+                  <div class="err-actions">
+                    <button class="btn btn-danger btn-sm">Reconnect Instagram</button>
+                    <button class="btn btn-ghost btn-sm" style="background:rgba(255,255,255,0.5)">Retry Post</button>
+                  </div>
+                </div>
+              </div>
+              <div class="exec-item" style="opacity:.6">
+                <div class="exec-status-icon" style="background:var(--green-light);font-size:14px">✓</div>
+                <div class="ei-info">
+                  <div class="ei-title">Weekly Product Update — Instagram</div>
+                  <div class="ei-time">Published last Monday at 9:11am</div>
+                  <div class="ei-platform">
+                    <div class="platform-dot ig" style="width:16px;height:16px;font-size:8px">I</div>
+                  </div>
+                </div>
+                <div class="badge badge-active" style="flex-shrink:0">
+                  <div class="badge-dot"></div>Live
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .4
+      }
+    }
+  </style>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let isAppMode = false;
+      const screens = document.querySelectorAll('.screen-wrap');
+      const screenIds = Array.from(screens).map(s => s.id);
+
+      // --- Navigation Logic ---
+      const navigateTo = (id) => {
+        if (isAppMode) {
+          screens.forEach(s => s.classList.remove('active'));
+          const target = document.getElementById(id);
+          if (target) target.classList.add('active');
+        } else {
+          const target = document.getElementById(id);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      };
+
+      // 1. Dashboard -> Create Workflow
+      const newWfBtns = document.querySelectorAll('#screen-dashboard .btn-primary');
+      newWfBtns.forEach(btn => btn.addEventListener('click', () => navigateTo('screen-create')));
+
+      // Dashboard workflow click -> Status screen
+      const wfCards = document.querySelectorAll('#screen-dashboard .workflow-card');
+      if (wfCards[0]) wfCards[0].addEventListener('click', () => navigateTo('screen-status'));
+
+      // 2. Create Workflow -> Builder
+      const continueBtn = document.querySelector('#screen-create .form-actions .btn-primary');
+      if (continueBtn) continueBtn.addEventListener('click', () => navigateTo('screen-builder'));
+
+      // Create Workflow interactions
+      const triggerCards = document.querySelectorAll('#screen-create .trigger-card');
+      triggerCards.forEach(card => {
+        card.addEventListener('click', () => {
+          triggerCards.forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+        });
+      });
+      const platCards = document.querySelectorAll('#screen-create .plat-card');
+      platCards.forEach(card => {
+        card.addEventListener('click', () => card.classList.toggle('selected'));
+      });
+
+      // 3. Builder -> Config
+      const builderSteps = document.querySelectorAll('#screen-builder .flow-step');
+      builderSteps.forEach(step => {
+        step.addEventListener('click', () => {
+          navigateTo('screen-config');
+        });
+      });
+
+      // 4. Config -> Review
+      const saveStepBtns = document.querySelectorAll('#screen-config .topbar-actions .btn-primary');
+      saveStepBtns.forEach(btn => btn.addEventListener('click', () => navigateTo('screen-review')));
+
+      // Config interactions
+      const tonePills = document.querySelectorAll('#screen-config .tone-pill');
+      tonePills.forEach(pill => {
+        pill.addEventListener('click', () => pill.classList.toggle('sel'));
+      });
+      const toggles = document.querySelectorAll('#screen-config .toggle');
+      toggles.forEach(toggle => {
+        toggle.addEventListener('click', () => toggle.classList.toggle('off'));
+      });
+
+      // 5. Review -> Status
+      const approveBtn = document.querySelector('#screen-review .btn-approve');
+      if (approveBtn) approveBtn.addEventListener('click', () => navigateTo('screen-status'));
+
+      // Review interactions
+      const previewTabs = document.querySelectorAll('#screen-review .preview-tab');
+      previewTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          previewTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+        });
+      });
+      const sugPills = document.querySelectorAll('#screen-review .sug-pill');
+      const editTextarea = document.querySelector('#screen-review .edit-textarea');
+      sugPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          if (editTextarea && !editTextarea.value.includes(pill.textContent)) {
+            if (pill.textContent.includes('CTA')) editTextarea.value += '\n\nLink in bio! 👇';
+            else if (pill.textContent.includes('emojis')) editTextarea.value = '✨ ' + editTextarea.value + ' 🔥';
+          }
+        });
+      });
+
+      // 6. Global back buttons
+      const backBtns = document.querySelectorAll('.btn-ghost');
+      backBtns.forEach(btn => {
+        if (btn.textContent.includes('Back') || btn.textContent.includes('Previous') || btn.textContent.includes('Builder')) {
+          btn.addEventListener('click', (e) => {
+            const currentScreen = e.target.closest('.screen-wrap');
+            const currentIndex = Array.from(screens).indexOf(currentScreen);
+            if (currentIndex > 0) navigateTo(screenIds[currentIndex - 1]);
+          });
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
